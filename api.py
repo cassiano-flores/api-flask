@@ -8,24 +8,24 @@ app = Flask(__name__)
 
 
 # GET - retorna todos os jogadores
-@app.route('/players', methods=['GET'])
+@app.route("/players", methods=["GET"])
 def get_players():
     players = DATASET.to_dict(orient="records")
     return jsonify(players), 200
 
 
 # GET - retorna um jogador especifico pelo indice (ID)
-@app.route('/player/<int:id>', methods=['GET'])
+@app.route("/player/<int:id>", methods=["GET"])
 def get_player(id):
     if 0 <= id < len(DATASET):
         player = DATASET.iloc[id].to_dict()
         return jsonify(player), 200
     else:
-        return jsonify({'message': 'Player not found'}), 404
+        return jsonify({"message": "Player not found"}), 404
 
 
 # PUT - atualiza um jogador especifico pelo indice (ID)
-@app.route('/player/<int:id>', methods=['PUT'])
+@app.route("/player/<int:id>", methods=["PUT"])
 def update_player(id):
     if 0 <= id < len(DATASET):
         new_data = request.json
@@ -35,11 +35,11 @@ def update_player(id):
         player = DATASET.iloc[id].to_dict()
         return jsonify(player), 200
     else:
-        return jsonify({'message': 'Player not found'}), 404
+        return jsonify({"message": "Player not found"}), 404
 
 
 # POST - adiciona novo jogador
-@app.route('/player', methods=['POST'])
+@app.route("/player", methods=["POST"])
 def add_player():
     global DATASET
 
@@ -51,15 +51,15 @@ def add_player():
 
 
 # DELETE - remove um jogador especifico pelo indice (ID)
-@app.route('/player/<int:id>', methods=['DELETE'])
+@app.route("/player/<int:id>", methods=["DELETE"])
 def remove_player(id):
     global DATASET
 
     if 0 <= id < len(DATASET):
         DATASET = DATASET.drop(index=id).reset_index(drop=True)
-        return jsonify({'message': f'Player with index {id} has been deleted.'}), 200
+        return jsonify({"message": f"Player with index {id} has been deleted."}), 200
     else:
-        return jsonify({'message': 'Player not found'}), 404
+        return jsonify({"message": "Player not found"}), 404
 
 
 # retorna para qualquer endpoint nao mapeado
@@ -68,10 +68,10 @@ def not_found_error(error):
     routes = [
         f"{rule.endpoint.upper()} - {rule.rule}"
         for rule in app.url_map.iter_rules()
-        if not rule.rule.startswith('/static')
+        if not rule.rule.startswith("/static")
     ]
-    return render_template('404.html', endpoints=routes), 404
+    return render_template("404.html", endpoints=routes), 404
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=8000)

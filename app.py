@@ -1,77 +1,85 @@
-import pandas as pd
-from flask import Flask, jsonify, request, render_template
+import json
+import requests
 
-CSV_FILE = "nba_players.csv"
-DATASET = pd.read_csv(CSV_FILE, sep=";")
-
-app = Flask(__name__)
+BASE_URL = "selected-ardelle-cassiano-flores-5f46ffab.koyeb.app"
 
 
-# GET - retorna todos os jogadores
-@app.route('/players', methods=['GET'])
 def get_players():
-    players = DATASET.to_dict(orient="records")
-    return jsonify(players), 200
-
-
-# GET - retorna um jogador especifico pelo indice (ID)
-@app.route('/player/<int:id>', methods=['GET'])
-def get_player(id):
-    if 0 <= id < len(DATASET):
-        player = DATASET.iloc[id].to_dict()
-        return jsonify(player), 200
+    response = requests.get(f"{BASE_URL}/players")
+    if response.status_code == 200:
+        players = response.json()
+        print(json.dumps(players, indent=4))
     else:
-        return jsonify({'message': 'Player not found'}), 404
+        print("Erro ao obter jogadores")
 
 
-# PUT - atualiza um jogador especifico pelo indice (ID)
-@app.route('/player/<int:id>', methods=['PUT'])
-def update_player(id):
-    if 0 <= id < len(DATASET):
-        new_data = request.json
-        for key in new_data.keys():
-            DATASET.at[id, key] = new_data[key]
-
-        player = DATASET.iloc[id].to_dict()
-        return jsonify(player), 200
+def get_player(player_id):
+    response = requests.get(f"{BASE_URL}/player/{player_id}")
+    if response.status_code == 200:
+        player = response.json()
+        print(json.dumps(player, indent=4))
     else:
-        return jsonify({'message': 'Player not found'}), 404
+        print("Erro ao obter jogador")
 
 
-# POST - adiciona novo jogador
-@app.route('/player', methods=['POST'])
-def add_player():
-    global DATASET
-
-    new_player = pd.DataFrame([request.json])
-    DATASET = pd.concat([DATASET, new_player], ignore_index=True)
-
-    player = DATASET.iloc[-1].to_dict()
-    return jsonify(player), 200
-
-
-# DELETE - remove um jogador especifico pelo indice (ID)
-@app.route('/player/<int:id>', methods=['DELETE'])
-def remove_player(id):
-    global DATASET
-
-    if 0 <= id < len(DATASET):
-        DATASET = DATASET.drop(index=id).reset_index(drop=True)
-        return jsonify({'message': f'Player with index {id} has been deleted.'}), 200
+def update_player(player_id, player_data):
+    response = requests.put(f"{BASE_URL}/player/{player_id}", json=player_data)
+    if response.status_code == 200:
+        player = response.json()
+        print(json.dumps(player, indent=4))
     else:
-        return jsonify({'message': 'Player not found'}), 404
+        print("Erro ao atualizar jogador")
 
 
-# retorna para qualquer endpoint nao mapeado
-@app.errorhandler(404)
-def not_found_error(error):
-    routes = [
-        f"{rule.endpoint.upper()} - {rule.rule}"
-        for rule in app.url_map.iter_rules()
-        if not rule.rule.startswith('/static')
-    ]
-    return render_template('404.html', endpoints=routes), 404
+def add_player(player_data):
+    response = requests.post(f"{BASE_URL}/player", json=player_data)
+    if response.status_code == 200:
+        player = response.json()
+        print(json.dumps(player, indent=4))
+    else:
+        print("Erro ao adicionar jogador")
 
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000)
+def remove_player(player_id):
+    response = requests.delete(f"{BASE_URL}/player/{player_id}")
+    if response.status_code == 200:
+        print(f"Jogador com ID {player_id} foi deletado")
+    else:
+        print("Erro ao remover jogador")
+
+
+def main():
+    while True:
+        print("\nEscolha uma opção:")
+        print("1. Obter todos os jogadores")
+        print("2. Obter jogador por ID")
+        print("3. Atualizar jogador")
+        print("4. Adicionar jogador")
+        print("5. Remover jogador")
+        print("6. Sair")
+
+        choice = input("Digite o número da opção: ")
+
+        if choice == "1":
+            get_players()
+        elif choice == "2":
+            player_id = int(input("Digite o ID do jogador: "))
+            get_player(player_id)
+        elif choice == "3":
+            player_id = int(input("Digite o ID do jogador: "))
+            player_data = json.loads(input("Digite os dados do jogador em JSON: "))
+            update_player(player_id, player_data)
+        elif choice == "4":
+            player_data = json.loads(input("Digite os dados do jogador em JSON: "))
+            add_player(player_data)
+        elif choice == "5":
+            player_id = int(input("Digite o ID do jogador: "))
+            remove_player(player_id)
+        elif choice == "6":
+            break
+        else:
+            print("Opção inválida")
+
+
+if __name__ == "__main__":
+    main()
