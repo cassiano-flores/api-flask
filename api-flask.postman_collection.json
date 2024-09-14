@@ -1,0 +1,141 @@
+{
+	"info": {
+		"_postman_id": "784213b8-0bd9-4dbc-9cfb-a919a7b346ec",
+		"name": "api-flask",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "20914156"
+	},
+	"item": [
+		{
+			"name": "all-players",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/players",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"players"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "one-player",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/player/12843",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"player",
+						"12843"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "update-player",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ast\": 1,\r\n    \"country\": \"USA\",\r\n    \"player_name\": \"Randy Livingston\",\r\n    \"pts\": 3.9,\r\n    \"reb\": 1.5,\r\n    \"season\": \"1996-97\",\r\n    \"team_abbreviation\": \"HOU\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/player/0",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"player",
+						"0"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "add-player",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ast\": 10,\r\n    \"country\": \"BR\",\r\n    \"player_name\": \"Cassiano Flores\",\r\n    \"pts\": 40,\r\n    \"reb\": 10,\r\n    \"season\": \"2023-24\",\r\n    \"team_abbreviation\": \"GSW\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/player",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"player"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "remove_player",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/player/12844",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"player",
+						"12844"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
