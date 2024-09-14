@@ -1,51 +1,51 @@
 import json
 import requests
 
-BASE_URL = "selected-ardelle-cassiano-flores-5f46ffab.koyeb.app"
+BASE_URL = "https://selected-ardelle-cassiano-flores-5f46ffab.koyeb.app"
 
 
 def get_players():
-    response = requests.get(f"{BASE_URL}/players")
-    if response.status_code == 200:
+    try:
+        response = requests.get(f"{BASE_URL}/players")
         players = response.json()
         print(json.dumps(players, indent=4))
-    else:
-        print("Erro ao obter jogadores")
+    except Exception as e:
+        print(f"Endpoint not found. {e.__str__()}")
 
 
 def get_player(player_id):
-    response = requests.get(f"{BASE_URL}/player/{player_id}")
-    if response.status_code == 200:
+    try:
+        response = requests.get(f"{BASE_URL}/player/{player_id}")
         player = response.json()
         print(json.dumps(player, indent=4))
-    else:
-        print("Erro ao obter jogador")
+    except Exception as e:
+        print(f"Endpoint not found. {e.__str__()}")
 
 
 def update_player(player_id, player_data):
-    response = requests.put(f"{BASE_URL}/player/{player_id}", json=player_data)
-    if response.status_code == 200:
+    try:
+        response = requests.put(f"{BASE_URL}/player/{player_id}", json=player_data)
         player = response.json()
         print(json.dumps(player, indent=4))
-    else:
-        print("Erro ao atualizar jogador")
+    except Exception as e:
+        print(f"Endpoint not found. {e.__str__()}")
 
 
 def add_player(player_data):
-    response = requests.post(f"{BASE_URL}/player", json=player_data)
-    if response.status_code == 200:
+    try:
+        response = requests.post(f"{BASE_URL}/player", json=player_data)
         player = response.json()
         print(json.dumps(player, indent=4))
-    else:
-        print("Erro ao adicionar jogador")
+    except Exception as e:
+        print(f"Endpoint not found. {e.__str__()}")
 
 
 def remove_player(player_id):
-    response = requests.delete(f"{BASE_URL}/player/{player_id}")
-    if response.status_code == 200:
-        print(f"Jogador com ID {player_id} foi deletado")
-    else:
-        print("Erro ao remover jogador")
+    try:
+        requests.delete(f"{BASE_URL}/player/{player_id}")
+        print(f"Player with index {player_id} has been deleted.")
+    except Exception as e:
+        print(f"Endpoint not found. {e.__str__()}")
 
 
 def main():
